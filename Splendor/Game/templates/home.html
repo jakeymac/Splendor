@@ -1,0 +1,12 @@
+<h1> Home Page </h1>
+<a href="{% url 'logout' %}">Logout</a><br>
+
+<button>Create a game</button><br>
+<form id="join-game-form" method="post">
+    {% csrf_token %}
+    <input type="text" name="game_id" placeholder="Game ID">
+    <button type="submit">Join game</button>
+</form>
+
+<h4>Your games in progress</h4>
+<ul id="player-games-list"></ul>
