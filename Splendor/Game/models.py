@@ -2,6 +2,13 @@ from django.db import models
 import json
 
 # Create your models here.
+
+class WaitingRoom(models.Model):
+    game_id = models.CharField(max_length=20)
+    game_master_id = models.IntegerField()
+    num_players = models.IntegerField()
+    players = models.CharField(max_length=1000)
+
 class GameSession(models.Model):
     board = models.CharField(max_length=1000)
     gems_available = models.CharField(max_length=500)
@@ -99,6 +106,9 @@ class Noble(models.Model):
 
     def set_cost(self, cost):
         self.cost = json.dumps(cost)
+
+    def __str__(self):
+        return f"{self.points} points, cost: {self.cost}"
 
 
 

@@ -1,0 +1,13 @@
+<h1>Waiting to start game...</h1>
+<h3>Game ID: {{ game_id }}</h3>
+<input type="hidden" id="max_players_input" value="{{ num_players }}">
+<h3 id="players-joined-label"></h3>
+<ul id="players-joined-list"></ul>
+{% if request.user.id == game_master_id %}
+    <button id="start-game-button" disabled>Start Game</button>
+    <button id="end-game-button">End Game</button>
+{% else %}
+    <p>Waiting for game master to start the game...</p>
+    <button id="leave-game-button">Leave Game</button>
+    
+{% endif %}

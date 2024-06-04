@@ -1,7 +1,7 @@
 <h1> Home Page </h1>
 <a href="{% url 'logout' %}">Logout</a><br>
 
-<button>Create a game</button><br>
+<a href="{% url 'new_game' %}"><button>Create a game</button></a><br>
 <form id="join-game-form" method="post">
     {% csrf_token %}
     <input type="text" name="game_id" placeholder="Game ID">

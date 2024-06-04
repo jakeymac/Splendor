@@ -30,4 +30,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = event["message"]
         username = event["username"]
         await self.send(text_data = json.dumps({"message":message ,"username":username}))
-      
+
+
+class WaitingRoomConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        self.user = self.scope["user"]
+        if self.user.is_anonymous:
+            await self.close()
+        else:
+            
+            
