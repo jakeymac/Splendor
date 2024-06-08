@@ -1,6 +1,8 @@
 <h1>New Game Options</h1>
 <form action="/create_game" method="post">
     {% csrf_token %}
+    <h1>{{game_id}}</h1>
+    <input type="hidden" name="game_id" id="game_id" value="{{ game_id }}">
     <label for="num_players">Number of Players:</label>
     <select id="num_players" name="num_players" required>
         <option value="2">2</option>
@@ -9,3 +11,4 @@
     </select>
     <br>
     <input type="submit" value="Create Game">
+</form>

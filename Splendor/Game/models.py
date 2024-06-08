@@ -9,6 +9,29 @@ class WaitingRoom(models.Model):
     num_players = models.IntegerField()
     players = models.CharField(max_length=1000)
 
+    def get_num_players_joined(self):
+        return len(self.players.split(','))
+
+    def has_already_joined(self, user_id):
+        return str(user_id) in self.players.split(',')
+
+    def add_player(self, user_id):
+        if self.players == "":
+            self.players = str(user_id)
+        else:
+            self.players += f",{user_id}"
+        
+        self.save()
+
+    
+
+    def remove_player(self, user_id):
+        players = self.players.split(',')
+        players.remove(str(user_id))
+        self.players = ','.join(players)
+        self.save()
+
+
 class GameSession(models.Model):
     board = models.CharField(max_length=1000)
     gems_available = models.CharField(max_length=500)

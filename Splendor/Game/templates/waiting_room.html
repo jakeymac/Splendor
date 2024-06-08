@@ -1,5 +1,9 @@
+{% load static %}
 <h1>Waiting to start game...</h1>
 <h3>Game ID: {{ game_id }}</h3>
+<script>var game_id = "{{game_id}}";
+console.log(game_id);</script>
+<script src="{% static 'js/waiting_room.js' %}"></script>
 <input type="hidden" id="max_players_input" value="{{ num_players }}">
 <h3 id="players-joined-label"></h3>
 <ul id="players-joined-list"></ul>
@@ -9,5 +13,5 @@
 {% else %}
     <p>Waiting for game master to start the game...</p>
     <button id="leave-game-button">Leave Game</button>
-    
+
 {% endif %}
