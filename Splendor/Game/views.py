@@ -37,11 +37,14 @@ def join_waiting_room(request, game_id):
     if request.user.is_authenticated:
         waiting_room = WaitingRoom.objects.get(game_id=game_id)
         if not waiting_room.has_already_joined(request.user.id):
-            if waiting_room.num_players > waiting_room.get_num_players_joined():
-                
+            if waiting_room.game_master_id != request.user.id:
+                if waiting_room.num_players > waiting_room.get_num_players_joined():
+                    waiting_room.add_player(request.user.id)
+                else:
+                    return HttpResponse("Game is full")
+                    
                 return render(request, 'waiting_room.html', context={"game_id": game_id, "game_master_id": waiting_room.game_master_id})
-            else:
-                return HttpResponse("Game is full")
+                
 
         return render(request, 'waiting_room.html', context={"game_id": game_id, "game_master_id": waiting_room.game_master_id})
         
