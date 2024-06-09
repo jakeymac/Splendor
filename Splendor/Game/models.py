@@ -1,7 +1,8 @@
 from django.db import models
 import json
+import random
 
-# Create your models here.
+from django.contrib.auth.models import User
 
 class WaitingRoom(models.Model):
     game_id = models.CharField(max_length=20)
@@ -10,27 +11,38 @@ class WaitingRoom(models.Model):
     players = models.CharField(max_length=1000)
 
     def get_num_players_joined(self):
+        if self.players == '':
+            return 0
         return len(self.players.split(','))
+    
+    def get_player_ids(self):
+        return self.players.split(',')
+
+    def get_player_usernames(self):
+        if self.get_num_players_joined() == 0:
+            return []
+
+        ids = self.get_player_ids()
+        usernames = []
+        for id in ids:
+            usernames.append(User.objects.get(id=id).username)
+
+        return usernames
 
     def has_already_joined(self, user_id):
         return str(user_id) in self.players.split(',')
 
     def add_player(self, user_id):
-        if self.players == "":
-            self.players = str(user_id)
-        else:
-            self.players += f",{user_id}"
-        
+        if self.get_num_players_joined() > 0:
+            self.players += ","
+        self.players += str(user_id)
         self.save()
-
-    
 
     def remove_player(self, user_id):
         players = self.players.split(',')
         players.remove(str(user_id))
         self.players = ','.join(players)
         self.save()
-
 
 class GameSession(models.Model):
     board = models.CharField(max_length=1000)
@@ -59,9 +71,28 @@ class GameSession(models.Model):
     
     def get_players(self):
         return json.loads(self.players)
-    
-    def set_players(self, players):
-        self.players = json.dumps(players)
+
+    def generate_new_board(self):
+        # cards
+        level1_cards = Card.objects.filter(level=1)
+        indices = [i for i in range(len(level1_cards))]
+        random.shuffle(indices)
+
+        row_1 = [str(card) for card in level1_cards[indices[0:4]]]
+        stack_1 = [str(card) for card in level1_cards[indices[4:]]]
+
+        level2_cards = Card.objects.filter(level=2)
+        indices = [i for i in range(len(level2_cards))]
+        random.shuffle(indices)
+        row_2 = [str(card) for card in level2_cards[indices[0:4]]]
+        stack_2 = [str(card) for card in level2_cards[indices[4:]]]
+
+        level3_cards = Card.objects.filter(level=3)
+        indices = [i for i in range(len(level3_cards))]
+        row_3 = [str(card) for card in level3_cards[indices[0:4]]]
+        stack_3 = [str(card) for card in level3_cards[indices[4:]]]
+
+        
 
 
 class Player(models.Model):

@@ -3,15 +3,25 @@
 <h3>Game ID: {{ game_id }}</h3>
 <script>var game_id = "{{game_id}}";
 console.log(game_id);</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{% static 'js/waiting_room.js' %}"></script>
-<input type="hidden" id="max_players_input" value="{{ num_players }}">
-<h3 id="players-joined-label"></h3>
-<ul id="players-joined-list"></ul>
+<input type="hidden" id="max_players_input" value="{{ max_players }}">
+<input type="hidden" id="current_players_joined_input" value="{{ num_players }}">
+<h3 id="players-joined-label">Players joined: 1/{{ max_players }}</h3>
+<ul id="players-joined-list">
+    {% for player in players %}
+        <li id=>{{ player }}</li>
+    {% endfor %}
+</ul>
 {% if request.user.id == game_master_id %}
     <button id="start-game-button" disabled>Start Game</button>
     <button id="end-game-button">End Game</button>
 {% else %}
     <p>Waiting for game master to start the game...</p>
     <button id="leave-game-button">Leave Game</button>
-
 {% endif %}
+<div id="chat-container">
+    <h2>Chat</h2>
+    <div id="chat-messages-container"></div>
+</div
+
